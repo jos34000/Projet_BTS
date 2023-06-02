@@ -84,8 +84,7 @@ session_start();
 
           if(isset($_POST['valider']))
           {
-            $nom=$_POST['nom'];
-            $prenom=$_POST['prenom'];
+            $pseudo=$_POST['pseudo'];
             $email=$_POST['email'];
             $mp1=$_POST['mp1'];
             $mp2=$_POST['mp2'];
@@ -93,13 +92,14 @@ session_start();
           if($mp1==$mp2)
           {
             $mp=sha1($mp1);
-            $res=mysqli_query($cn,"insert into utilisateur values (NULL,'$nom','$prenom','$email','$mp')");  
+            $res=mysqli_query($cn,"insert into utilisateur values (NULL,'$pseudo','$mp1','$email')");  
 
           $id=mysqli_insert_id($cn);
           $photo="$id.jpg";
 
-          move_uploaded_file($_FILES['photo']['tmp_name'], "images/$photo");
+          move_uploaded_file($_FILES['photo']['tmp_name'], "assets/images/$photo");
           echo 'Inscription réussie !!!';
+          header("location:index.php");
           }
           else
             echo 'les mots de passe ne sont pas identiques ';
