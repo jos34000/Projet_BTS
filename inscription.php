@@ -33,51 +33,80 @@ session_start();
 
 				<form action="" method="post" id="inscription" enctype="multipart/form-data">
 					<span class="login100-form-title">Inscription</span>
-
-					<div class="wrap-input100 validate-input" data-validate = "Valid email is required: ex@abc.xyz">
+          <!--email-->
+					<div class="wrap-input100 validate-input" data-validate = "Valid email is required: ex@abc.xyz" required="required">
 						<input class="input100" type="text" name="email" placeholder="Email" class="ch">
 						<span class="focus-input100"></span>
 						<span class="symbol-input100">
 							<i class="fa fa-envelope" aria-hidden="true"></i>
 						</span>
 					</div>
-
-					<div class="wrap-input100 validate-input" data-validate ="Password is required" >
-						<input class="input100" type="password" name="mdp" placeholder="Mot de passe" class="ch">
+          <!--pseudo-->
+					<div class="wrap-input100 validate-input" data-validate = "" required="required">
+						<input class="input100" type="text" name="pseudo" placeholder="Pseudo" class="ch">
+						<span class="focus-input100"></span>
+						<span class="symbol-input100">
+							<i class="fa fa-envelope" aria-hidden="true"></i>
+						</span>
+					</div>
+          <!--mdp-->
+					<div class="wrap-input100 validate-input" data-validate ="Password is required" required="required">
+						<input class="input100" type="password" name="mp1" placeholder="Mot de passe" class="ch">
 						<span class="focus-input100"></span>
 						<span class="symbol-input100">
 							<i class="fa fa-lock" aria-hidden="true"></i>
 						</span>
 					</div>
-					
+          <!--confirm mdp-->
+					<div class="wrap-input100 validate-input" data-validate ="Password is required" required="required" >
+						<input class="input100" type="password" name="mp2" placeholder="Confirmer le mot de passe" class="ch">
+						<span class="focus-input100"></span>
+						<span class="symbol-input100">
+							<i class="fa fa-lock" aria-hidden="true"></i>
+						</span>
+					</div>
+          <!--Avatar-->
+					<div class="wrap-input100 validate-input" data-validate ="Password is required" required="required" >
+						<input class="input100" type="file" name="photo" class="ch">
+						<span class="focus-input100"></span>
+						<span class="symbol-input100">
+							<i class="fa fa-lock" aria-hidden="true"></i>
+						</span>
+					</div>
+
+          <!--validation-->
 					<div class="container-login100-form-btn">
 						<input class="login100-form-btn" type="submit" name="valider" value="Valider" class="ch">
 					</div>
 					
 					<?php
-					include("connexion.php");
+          include("connexion.php");
 
-					if(isset($_POST['valider']))
-					{
-						$email=$_POST['email'];
-						$mp=$_POST['mdp'];
-						$res=mysqli_query($cn,"select * from utilisateur where email_user='$email' and mdp_user='$mp'");	
-						$nbr=mysqli_num_rows($res);
-						if($nbr==0)
-						{
-							echo '<br><br>Login ou mot de passe incorrects ';
-						}
-						else
-						{
-							$data=mysqli_fetch_assoc($res);
-							$_SESSION['id_user']=$data['id_user'];
-							$_SESSION['pseudo']=$data['pseudo_user'];
-							$_SESSION['login']=$data['email_user'];
-							$_SESSION['mdp']=$data['mdp_user'];
-							header("location:forum.php");
-						} 
-					}
-					?>
+          if(isset($_POST['valider']))
+          {
+            $nom=$_POST['nom'];
+            $prenom=$_POST['prenom'];
+            $email=$_POST['email'];
+            $mp1=$_POST['mp1'];
+            $mp2=$_POST['mp2'];
+
+          if($mp1==$mp2)
+          {
+            $mp=sha1($mp1);
+            $res=mysqli_query($cn,"insert into utilisateur values (NULL,'$nom','$prenom','$email','$mp')");  
+
+          $id=mysqli_insert_id($cn);
+          $photo="$id.jpg";
+
+          move_uploaded_file($_FILES['photo']['tmp_name'], "images/$photo");
+          echo 'Inscription réussie !!!';
+          }
+          else
+            echo 'les mots de passe ne sont pas identiques ';
+
+          }
+          ?>
+
 				</form>
 			</div>
 		</div>
@@ -103,44 +132,3 @@ session_start();
 </body>
 </html>
 
-<form action="" method="post" id="inscription" enctype="multipart/form-data">
-<input type="text" name="nom" placeholder="nom" class="ch" required="required"><br>
-<input type="text" name="prenom" placeholder="prenom" class="ch" required="required"><br>
-<input type="email" name="email" placeholder="email" class="ch" required="required"><br>
-<input type="password" name="mp1" placeholder="mot de passe" class="ch" required="required"><br>
-<input type="password" name="mp2" placeholder="confirmer mot de passe" class="ch" required="required"><br>
-<input type="file" name="photo" class="ch">
-<input type="submit" name="valider" value="Valider" class="ch">
-<?php
-include("connexion.php");
-
-if(isset($_POST['valider']))
-{
-	$nom=$_POST['nom'];
-  $prenom=$_POST['prenom'];
-  $email=$_POST['email'];
-  $mp1=$_POST['mp1'];
-  $mp2=$_POST['mp2'];
-
-if($mp1==$mp2)
-{
-  $mp=sha1($mp1);
-  $res=mysqli_query($cn,"insert into utilisateur values (NULL,'$nom','$prenom','$email','$mp')");  
-
-$id=mysqli_insert_id($cn);
-$photo="$id.jpg";
-
-move_uploaded_file($_FILES['photo']['tmp_name'], "images/$photo");
-echo 'Inscription réussie !!!';
-}
-else
-  echo 'les mots de passe ne sont pas identiques ';
-
-}
-?>
-
-</form>
-</div>
-</body>
-
-</html>
