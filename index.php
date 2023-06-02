@@ -1,7 +1,10 @@
+<!-- Début de session -->
 <?php
 session_start();
 ?>
-<html>
+
+<!DOCTYPE html>
+<html lang="fr">
 <head>
 	<title>Forum BTS</title>
 	<meta charset="UTF-8">
@@ -24,26 +27,27 @@ session_start();
 <!--===============================================================================================-->
 </head>
 <body>
-		<div class="limiter">
+	
+	<div class="limiter">
 		<div class="container-login100">
 			<div class="wrap-login100">
 				<div class="login100-pic js-tilt" data-tilt>
 					<img src="assets/images/logo2BTS.png" alt="IMG">
 				</div>
 
-				<form action="" method="post" id="inscription" enctype="multipart/form-data">
-					<span class="login100-form-title">Inscription</span>
+				<form class="login100-form validate-form" action="" method="post" id="flogin">
+					<span class="login100-form-title">Connexion</span>
 
 					<div class="wrap-input100 validate-input" data-validate = "Valid email is required: ex@abc.xyz">
-						<input class="input100" type="text" name="email" placeholder="Email" class="ch">
+						<input class="input100" type="text" name="email" placeholder="Email" class="ch>
 						<span class="focus-input100"></span>
 						<span class="symbol-input100">
 							<i class="fa fa-envelope" aria-hidden="true"></i>
 						</span>
 					</div>
 
-					<div class="wrap-input100 validate-input" data-validate ="Password is required" >
-						<input class="input100" type="password" name="mdp" placeholder="Mot de passe" class="ch">
+					<div class="wrap-input100 validate-input" data-validate = "Password is required" >
+						<input class="input100" type="password" name="mdp" placeholder="Mot de passe" class="ch>
 						<span class="focus-input100"></span>
 						<span class="symbol-input100">
 							<i class="fa fa-lock" aria-hidden="true"></i>
@@ -53,7 +57,19 @@ session_start();
 					<div class="container-login100-form-btn">
 						<input class="login100-form-btn" type="submit" name="valider" value="Valider" class="ch">
 					</div>
-					
+
+					<div class="text-center p-t-12">
+						<a class="txt2" href="#">
+							Email / Mot de passe perdu ?
+						</a>
+					</div>
+
+					<div class="text-center p-t-136">
+						<a class="txt2" href="inscription.php">
+							Créer votre compte
+							<i class="fa fa-long-arrow-right m-l-5" aria-hidden="true"></i>
+						</a>
+					</div>
 					<?php
 					include("connexion.php");
 
@@ -101,46 +117,4 @@ session_start();
 	<script src="assets/js/main.js"></script>
 
 </body>
-</html>
-
-<form action="" method="post" id="inscription" enctype="multipart/form-data">
-<input type="text" name="nom" placeholder="nom" class="ch" required="required"><br>
-<input type="text" name="prenom" placeholder="prenom" class="ch" required="required"><br>
-<input type="email" name="email" placeholder="email" class="ch" required="required"><br>
-<input type="password" name="mp1" placeholder="mot de passe" class="ch" required="required"><br>
-<input type="password" name="mp2" placeholder="confirmer mot de passe" class="ch" required="required"><br>
-<input type="file" name="photo" class="ch">
-<input type="submit" name="valider" value="Valider" class="ch">
-<?php
-include("connexion.php");
-
-if(isset($_POST['valider']))
-{
-	$nom=$_POST['nom'];
-  $prenom=$_POST['prenom'];
-  $email=$_POST['email'];
-  $mp1=$_POST['mp1'];
-  $mp2=$_POST['mp2'];
-
-if($mp1==$mp2)
-{
-  $mp=sha1($mp1);
-  $res=mysqli_query($cn,"insert into utilisateur values (NULL,'$nom','$prenom','$email','$mp')");  
-
-$id=mysqli_insert_id($cn);
-$photo="$id.jpg";
-
-move_uploaded_file($_FILES['photo']['tmp_name'], "images/$photo");
-echo 'Inscription réussie !!!';
-}
-else
-  echo 'les mots de passe ne sont pas identiques ';
-
-}
-?>
-
-</form>
-</div>
-</body>
-
 </html>
